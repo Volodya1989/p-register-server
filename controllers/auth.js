@@ -42,7 +42,7 @@ const register = async (req, res) => {
   await sendEmail(verifyEmail);
 
   res.status(201).json({
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: { email: newUser.email, userStatus: newUser.userStatus },
   });
 };
 
@@ -109,7 +109,12 @@ const login = async (req, res) => {
 
   res.json({
     token,
-    user: { email: user.email, subscription: user.subscription },
+    user: {
+      email: user.email,
+      userStatus: user.userStatus,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    },
   });
 };
 
@@ -125,7 +130,7 @@ const getCurrent = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-
+  
   res.status(204).json({});
 };
 

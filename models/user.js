@@ -7,6 +7,16 @@ const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
   {
+    firstName: {
+      type: String,
+      required: [true, "First Name is required"],
+      unique: false,
+    },
+    lastName: {
+      type: String,
+      required: [true, "Last Name is required"],
+      unique: false,
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -16,18 +26,14 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    subscription: {
+    userStatus: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      enum: ["admin", "clergy", "viewOnly"],
+      default: "admin",
     },
     token: {
       type: String,
       default: null,
-    },
-    avatarURL: {
-      type: String,
-      required: true,
     },
     verify: {
       type: Boolean,
@@ -44,6 +50,18 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
+  firstName: Joi.string().max(15).min(3).required().empty().messages({
+    "string.empty": `First Name cannot be an empty field`,
+    "string.max": `First Name should have a maximum length of {#limit}`,
+    "string.min": `First Name should have a minimum length of {#limit}`,
+    "any.required": `missing required First Name field`,
+  }),
+  lastName: Joi.string().max(15).min(3).required().empty().messages({
+    "string.empty": `Last Name cannot be an empty field`,
+    "string.max": `Last Name should have a maximum length of {#limit}`,
+    "string.min": `Last Name should have a minimum length of {#limit}`,
+    "any.required": `missing required Last Name field`,
+  }),
   email: Joi.string().pattern(emailRegexp).required().empty().messages({
     "string.empty": `EMAIL cannot be an empty field`,
     "any.required": `missing required EMAIL field`,
