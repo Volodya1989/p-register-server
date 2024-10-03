@@ -41,7 +41,24 @@ const updateBaptism = async (req, res) => {
   res.json(updatedBaptism);
 };
 
-const updateFavorite = async (req, res) => {
+const updateCertificate = async (req, res) => {
+  const { id } = req.params;
+  const result = await Baptism.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
+
+const updateEucharist = async (req, res) => {
+  const { id } = req.params;
+  const result = await Baptism.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
+const updateChrismation = async (req, res) => {
   const { id } = req.params;
   const result = await Baptism.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
@@ -66,6 +83,8 @@ module.exports = {
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(addBaptism),
   updateById: ctrlWrapper(updateBaptism),
-  updateFavorite: ctrlWrapper(updateFavorite),
+  updateCertificate: ctrlWrapper(updateCertificate),
+  updateEucharist: ctrlWrapper(updateEucharist),
+  updateChrismation: ctrlWrapper(updateChrismation),
   deleteById: ctrlWrapper(removeBaptism),
 };

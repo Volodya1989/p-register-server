@@ -2,30 +2,33 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
+const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const baptismSchema = new Schema(
   {
     sacrament: {
       type: String,
+      enum: ["Baptism", "Matrimony"],
       required: [true, "Set name for baptism is required"],
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
     },
-    childsFirstName: {
+    childFirstName: {
       type: String,
       required: [true, "Child's first name for baptism is required"],
     },
-    childsLastName: {
+    childLastName: {
       type: String,
       required: [true, "Child's last name for baptism is required"],
     },
-    childsMiddleName: {
+    childMiddleName: {
       type: String,
+      required: false,
     },
     dateOfBirth: {
-      type: String,
+      type: Date,
       required: [true, "Child's DOB is required"],
     },
     cityOfBirth: {
@@ -37,14 +40,14 @@ const baptismSchema = new Schema(
       required: [true, "State where person was born  is required"],
     },
     dateSacramentPerformed: {
-      type: String,
+      type: Date,
       required: [true, "Date that sacrament performed is required"],
     },
     motherMaidenName: {
       type: String,
       required: [true, "Child's mother's maiden name is required"],
     },
-    otherFirstName: {
+    motherFirstName: {
       type: String,
       required: [true, "Child's mother's first name is required"],
     },
@@ -56,27 +59,34 @@ const baptismSchema = new Schema(
       type: String,
       required: [true, "Child's fathers's first name is required"],
     },
-    godMotherLastName: {
+    godParentFirstLastName: {
       type: String,
-      required: [true, "Child's god-mother's last name is required"],
+      required: [true, "Child's god-parent's last name is required"],
     },
-    godMotherFirstName: {
+    godParentFirstFirstName: {
       type: String,
-      required: [true, "Child's god-mother's first name is required"],
+      required: [true, "Child's god-parent's first name is required"],
     },
-    godFatherLastName: {
+    godParentSecondLastName: {
       type: String,
-      required: [true, "Child's god-father's last name is required"],
+      required: false,
     },
-    godFatherFirstName: {
+    godParentSecondFirstName: {
       type: String,
-      required: [true, "Child's god-fathers's first name is required"],
+      required: false,
     },
-    priestPerformedSacrament: {
+    priestFirstName: {
       type: String,
       required: [
         true,
-        "Name of the priest that performed Holy Sacrament is required",
+        "First Name of the priest that performed Holy Sacrament is required",
+      ],
+    },
+    priestLastName: {
+      type: String,
+      required: [
+        true,
+        "Last Name of the priest that performed Holy Sacrament is required",
       ],
     },
     notes: {
@@ -86,6 +96,18 @@ const baptismSchema = new Schema(
     phone: {
       type: String,
       required: true,
+    },
+    certificate: {
+      type: Boolean,
+      default: false,
+    },
+    chrismation: {
+      type: Boolean,
+      default: false,
+    },
+    eucharist: {
+      type: Boolean,
+      default: false,
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -99,11 +121,9 @@ const baptismSchema = new Schema(
 baptismSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string().required().messages({
-    "any.required": `missing required email field`,
+  email: Joi.string().pattern(emailRegexp).required().empty().messages({
+    "string.empty": `EMAIL cannot be an empty field`,
+    "any.required": `missing required EMAIL field`,
   }),
   phone: Joi.string().required().messages({
     "any.required": `missing required phone field`,
@@ -111,11 +131,14 @@ const addSchema = Joi.object({
   sacrament: Joi.string().required().messages({
     "any.required": `missing required sacrament field`,
   }),
-  childsFirstName: Joi.string().required().messages({
-    "any.required": `missing required childsFirstName field`,
+  childFirstName: Joi.string().required().messages({
+    "any.required": `missing required childFirstName field`,
   }),
-  childsLastName: Joi.string().required().messages({
-    "any.required": `missing required childsLastName field`,
+  childLastName: Joi.string().required().messages({
+    "any.required": `missing required childLastName field`,
+  }),
+  childMiddleName: Joi.string().optional().messages({
+    "any.optional": `missing required childLastName field`,
   }),
   dateOfBirth: Joi.string().required().messages({
     "any.required": `missing required dateOfBirth field`,
@@ -141,34 +164,54 @@ const addSchema = Joi.object({
   fatherFirstName: Joi.string().required().messages({
     "any.required": `missing required fatherFirstName field`,
   }),
-  godMotherLastName: Joi.string().required().messages({
-    "any.required": `missing required godMotherLastName field`,
+  godParentFirstFirstName: Joi.string().required().messages({
+    "any.required": `missing required godParentFirstFirstName field`,
   }),
-  godFatherLastName: Joi.string().required().messages({
-    "any.required": `missing required godFatherLastName field`,
+  godParentFirstLastName: Joi.string().required().messages({
+    "any.required": `missing required godParentFirstLastName field`,
   }),
-  godFatherFirstName: Joi.string().required().messages({
-    "any.required": `missing required godFatherFirstName field`,
+  godParentSecondFirstName: Joi.string().optional().messages({
+    "any.required": `missing required godParentFirstFirstName field`,
   }),
-  priestPerformedSacrament: Joi.string().required().messages({
-    "any.required": `missing required priestPerformedSacrament field`,
+  godParentSecondLastName: Joi.string().optional().messages({
+    "any.required": `missing required godParentFirstLastName field`,
   }),
-  favorite: Joi.boolean(),
+  priestFirstName: Joi.string().required().messages({
+    "any.required": `missing required priestFirstName field`,
+  }),
+  priestLastName: Joi.string().required().messages({
+    "any.required": `missing required priestFirstName field`,
+  }),
+  certificate: Joi.boolean(),
+  chrismation: Joi.boolean(),
+  eucharist: Joi.boolean(),
 });
 
 module.exports = {
   addSchema,
 };
 
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required().messages({
-    "any.required": `missing field favorite`,
+const updateCertificateSchema = Joi.object({
+  certificate: Joi.boolean().required().messages({
+    "any.required": `missing field certificate`,
+  }),
+});
+const updateChrismationSchema = Joi.object({
+  christmation: Joi.boolean().required().messages({
+    "any.required": `missing field christmation`,
+  }),
+});
+const updateEucharistSchema = Joi.object({
+  eucharist: Joi.boolean().required().messages({
+    "any.required": `missing field eucharist`,
   }),
 });
 
 const schemas = {
   addSchema,
-  updateFavoriteSchema,
+  updateCertificateSchema,
+  updateChrismationSchema,
+  updateEucharistSchema,
 };
 
 const Baptism = model("baptism", baptismSchema);
