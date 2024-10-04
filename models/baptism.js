@@ -319,6 +319,9 @@ const addSchema = Joi.object({
       "any.required": `priest.phone is optional field`,
     }),
   }),
+  notes: Joi.string().optional().messages({
+    "any.required": `notes is optional field`,
+  }),
   certificate: Joi.boolean(),
   chrismation: Joi.boolean(),
   eucharist: Joi.boolean(),

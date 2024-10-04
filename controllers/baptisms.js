@@ -10,7 +10,7 @@ const listBaptisms = async (req, res) => {
     skip,
     limit,
   }).populate("owner", "email");
-  res.json(listBaptisms);
+  res.json({ total: listBaptisms.length, listBaptisms });
 };
 
 const getById = async (req, res) => {
