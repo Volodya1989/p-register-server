@@ -29,7 +29,7 @@ const userSchema = new Schema(
     userStatus: {
       type: String,
       enum: ["admin", "clergy", "viewOnly"],
-      default: "admin",
+      default: "clergy",
     },
     token: {
       type: String,
@@ -42,6 +42,13 @@ const userSchema = new Schema(
     verificationToken: {
       type: String,
       required: [true, "Verify token is required"],
+    },
+    parish: {
+      type: Schema.Types.ObjectId,
+      ref: "parish",
+      required: function () {
+        return this.userStatus !== "admin";
+      },
     },
   },
   { versionKey: false, timestamps: true }
@@ -62,10 +69,17 @@ const registerSchema = Joi.object({
     "string.min": `Last Name should have a minimum length of {#limit}`,
     "any.required": `missing required Last Name field`,
   }),
+  parish: Joi.string().max(30).optional().empty().messages({
+    "string.empty": `Parish cannot be an empty field`,
+  }),
+  userStatus: Joi.string().max(30).optional().empty().messages({
+    "string.empty": `userStatus cannot be an empty field`,
+  }),
   email: Joi.string().pattern(emailRegexp).required().empty().messages({
     "string.empty": `EMAIL cannot be an empty field`,
     "any.required": `missing required EMAIL field`,
   }),
+
   password: Joi.string().min(6).required().empty().messages({
     "string.empty": `PASSWORD cannot be an empty field`,
     "string.min": `PASSWORD should have a minimum length of {#limit}`,
