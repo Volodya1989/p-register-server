@@ -187,11 +187,15 @@ const baptismSchema = new Schema(
     },
     parishOwner: {
       type: Schema.Types.ObjectId,
+      //would need delete defaul option after UI user is implemented
+      default: "670061dbdbc4ca411b1325e4",
       ref: "parish",
       required: true,
     },
     userOwner: {
       type: Schema.Types.ObjectId,
+      //would need delete defaul option after UI user is implemented
+      default: "67007c81bd86684890db094a",
       ref: "user",
       required: true,
     },
