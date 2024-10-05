@@ -1,63 +1,137 @@
 const Joi = require("joi");
 
 const addSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string().required().messages({
-    "any.required": `missing required email field`,
-  }),
-  phone: Joi.string().required().messages({
-    "any.required": `missing required phone field`,
-  }),
   sacrament: Joi.string().required().messages({
     "any.required": `missing required sacrament field`,
   }),
-  childsFirstName: Joi.string().required().messages({
-    "any.required": `missing required childsFirstName field`,
+  sacramentsReceived: Joi.object({
+    chrismation: Joi.boolean(),
+    eucharist: Joi.boolean(),
+    baptism: Joi.boolean(),
+    dateSacramentPerformed: Joi.string().required().messages({
+      "any.required": `missing required dateSacramentPerformed field`,
+    }),
   }),
-  childsLastName: Joi.string().required().messages({
-    "any.required": `missing required childsLastName field`,
+  neophyte: Joi.object({
+    email: Joi.string().pattern(emailRegexp).required().empty().messages({
+      "string.empty": `EMAIL cannot be an empty field`,
+      "any.required": `missing required neophyte.email field`,
+    }),
+    phone: Joi.string().required().messages({
+      "any.required": `missing required neophyte.phone field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required neophyte.firstName field`,
+    }),
+    lastName: Joi.string().required().messages({
+      "any.required": `missing required neophyte.lastName field`,
+    }),
+    middleName: Joi.string().optional().messages({
+      "any.optional": `missing required neophyte.middleName field`,
+    }),
+    dob: Joi.string().required().messages({
+      "any.required": `missing required neophyte.dob field`,
+    }),
+    cityOfBirth: Joi.string().required().messages({
+      "any.required": `missing required neophyte.cityOfBirth field`,
+    }),
+    stateOfBirth: Joi.string().required().messages({
+      "any.required": `missing required neophyte.stateOfBirth field`,
+    }),
+    street: Joi.string().required().messages({
+      "any.required": `missing required neophyte.street field`,
+    }),
+    city: Joi.string().required().messages({
+      "any.required": `missing required neophyte.city field`,
+    }),
+    state: Joi.string().required().messages({
+      "any.required": `missing required neophyte.state field`,
+    }),
+    zip: Joi.string().required().messages({
+      "any.required": `missing required neophyte.zip field`,
+    }),
   }),
-  dateOfBirth: Joi.string().required().messages({
-    "any.required": `missing required dateOfBirth field`,
+  mother: Joi.object({
+    maidenName: Joi.string().required().messages({
+      "any.required": `missing required mother.maidenName field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required mother.firstName field`,
+    }),
+    phone: Joi.string().optional().messages({
+      "any.required": `mother.phone is optional field`,
+    }),
   }),
-  cityOfBirth: Joi.string().required().messages({
-    "any.required": `missing required cityOfBirth field`,
+  father: Joi.object({
+    lastName: Joi.string().required().messages({
+      "any.required": `missing required father.lastName field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required father.firstName field`,
+    }),
+    phone: Joi.string().optional().messages({
+      "any.required": `father.phone is optional field`,
+    }),
   }),
-  stateOfBirth: Joi.string().required().messages({
-    "any.required": `missing required stateOfBirth field`,
+  godParent_1: Joi.object({
+    lastName: Joi.string().required().messages({
+      "any.required": `missing required godParent_1.lastName field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required godParent_1.firsttName field`,
+    }),
+    phone: Joi.string().optional().messages({
+      "any.required": `father.phone is optional field`,
+    }),
   }),
-  dateSacramentPerformed: Joi.string().required().messages({
-    "any.required": `missing required dateSacramentPerformed field`,
+  godParent_2: Joi.object({
+    lastName: Joi.string().required().messages({
+      "any.required": `missing required godParent_2.lastName field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required godParent_2.firsttName field`,
+    }),
+    phone: Joi.string().optional().messages({
+      "any.required": `father.phone is optional field`,
+    }),
+  }).optional(),
+  godParent_3: Joi.object({
+    lastName: Joi.string().required().messages({
+      "any.required": `missing required godParent_3.lastName field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required godParent_3.firsttName field`,
+    }),
+    phone: Joi.string().optional().messages({
+      "any.required": `father.phone is optional field`,
+    }),
+  }).optional(),
+  godParent_4: Joi.object({
+    lastName: Joi.string().required().messages({
+      "any.required": `missing required godParent_4.lastName field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required godParent_4.firsttName field`,
+    }),
+    phone: Joi.string().optional().messages({
+      "any.required": `father.phone is optional field`,
+    }),
+  }).optional(),
+  priest: Joi.object({
+    lastName: Joi.string().required().messages({
+      "any.required": `missing required priest.lastName field`,
+    }),
+    firstName: Joi.string().required().messages({
+      "any.required": `missing required priest.firstName field`,
+    }),
+    phone: Joi.string().optional().messages({
+      "any.required": `priest.phone is optional field`,
+    }),
   }),
-  motherMaidenName: Joi.string().required().messages({
-    "any.required": `missing required motherMaidenName field`,
-  }),
-  motherFirstName: Joi.string().required().messages({
-    "any.required": `missing required motherFirstName field`,
-  }),
-  fatherLastName: Joi.string().required().messages({
-    "any.required": `missing required fatherLastName field`,
-  }),
-  fatherFirstName: Joi.string().required().messages({
-    "any.required": `missing required fatherFirstName field`,
-  }),
-  godParentFirstFirstName: Joi.string().required().messages({
-    "any.required": `missing required godParentFirstFirstName field`,
-  }),
-  godParentFirstLastName: Joi.string().required().messages({
-    "any.required": `missing required godParentFirstLastName field`,
-  }),
-  priestFirstName: Joi.string().required().messages({
-    "any.required": `missing required priestFirstName field`,
-  }),
-  priestLastName: Joi.string().required().messages({
-    "any.required": `missing required priestFirstName field`,
+  notes: Joi.string().optional().messages({
+    "any.required": `notes is optional field`,
   }),
   certificate: Joi.boolean(),
-  eucharist: Joi.boolean(),
-  chrismation: Joi.boolean(),
 });
 
 module.exports = {

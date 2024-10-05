@@ -24,7 +24,6 @@ const getById = async (req, res) => {
 
 const addParish = async (req, res) => {
   const { _id: owner, userStatus } = req.user;
-  console.log(userStatus);
   if (userStatus !== "admin") {
     throw HttpError(
       400,

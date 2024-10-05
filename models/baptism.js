@@ -11,21 +11,26 @@ const baptismSchema = new Schema(
       enum: ["Baptism", "Matrimony"],
       required: [true, "Set name for baptism is required"],
     },
-    dateSacramentPerformed: {
-      type: Date,
-      required: [true, "Date that sacrament performed is required"],
-    },
     certificate: {
-      type: Boolean,
-      default: false,
-    },
-    chrismation: {
       type: Boolean,
       default: false,
     },
     eucharist: {
       type: Boolean,
       default: false,
+    },
+
+    chrismation: {
+      type: Boolean,
+      default: false,
+    },
+    baptism: {
+      type: Boolean,
+      default: false,
+    },
+    dateSacramentPerformed: {
+      type: Date,
+      required: [true, "Date that sacrament performed is required"],
     },
     neophyte: {
       email: {
@@ -209,9 +214,13 @@ const addSchema = Joi.object({
   sacrament: Joi.string().required().messages({
     "any.required": `missing required sacrament field`,
   }),
+  eucharist: Joi.boolean(),
+  chrismation: Joi.boolean(),
+  baptism: Joi.boolean(),
   dateSacramentPerformed: Joi.string().required().messages({
     "any.required": `missing required dateSacramentPerformed field`,
   }),
+
   neophyte: Joi.object({
     email: Joi.string().pattern(emailRegexp).required().empty().messages({
       "string.empty": `EMAIL cannot be an empty field`,
@@ -332,8 +341,6 @@ const addSchema = Joi.object({
     "any.required": `notes is optional field`,
   }),
   certificate: Joi.boolean(),
-  chrismation: Joi.boolean(),
-  eucharist: Joi.boolean(),
 });
 
 module.exports = {
@@ -346,13 +353,18 @@ const updateCertificateSchema = Joi.object({
   }),
 });
 const updateChrismationSchema = Joi.object({
-  christmation: Joi.boolean().required().messages({
-    "any.required": `missing field christmation`,
+  chrismation: Joi.boolean().required().messages({
+    "any.required": `missing field chrismation`,
   }),
 });
 const updateEucharistSchema = Joi.object({
   eucharist: Joi.boolean().required().messages({
     "any.required": `missing field eucharist`,
+  }),
+});
+const updateBaptismSchema = Joi.object({
+  baptism: Joi.boolean().required().messages({
+    "any.required": `missing field baptism`,
   }),
 });
 
@@ -361,6 +373,7 @@ const schemas = {
   updateCertificateSchema,
   updateChrismationSchema,
   updateEucharistSchema,
+  updateBaptismSchema,
 };
 
 const Baptism = model("baptism", baptismSchema);
