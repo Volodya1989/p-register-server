@@ -23,8 +23,14 @@ const getById = async (req, res) => {
 };
 
 const addParish = async (req, res) => {
-  const { _id: owner } = req.user;
-
+  const { _id: owner, userStatus } = req.user;
+  console.log(userStatus);
+  if (userStatus !== "admin") {
+    throw HttpError(
+      400,
+      "Regular users are not authorized to add new parishes, but only new Sacramental records and regular users."
+    );
+  }
   const addedParish = await Parish.create({ ...req.body, owner });
   res.status(201).json(addedParish);
 };

@@ -185,7 +185,12 @@ const baptismSchema = new Schema(
     notes: {
       type: String,
     },
-    owner: {
+    parishOwner: {
+      type: Schema.Types.ObjectId,
+      ref: "parish",
+      required: true,
+    },
+    userOwner: {
       type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
