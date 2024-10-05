@@ -27,7 +27,6 @@ const getById = async (req, res) => {
 };
 
 const addBaptism = async (req, res) => {
-  console.log(req.user);
   const { _id: userOwner, parish: parishOwner, userStatus } = req.user;
   if (userStatus === "admin") {
     throw HttpError(

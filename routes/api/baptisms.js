@@ -31,14 +31,21 @@ router.patch(
   "/:id/eucharist",
   authenticate,
   isValidId,
-  validateBody(schemas.updateEucharist),
+  validateBody(schemas.updateEucharistSchema),
   ctrl.updateEucharist
 );
 router.patch(
   "/:id/chrismation",
   authenticate,
   isValidId,
-  validateBody(schemas.updateChrismation),
+  validateBody(schemas.updateChrismationSchema),
+  ctrl.updateChrismation
+);
+router.patch(
+  "/:id/baptism",
+  authenticate,
+  isValidId,
+  validateBody(schemas.updateBaptismSchema),
   ctrl.updateChrismation
 );
 
