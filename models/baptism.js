@@ -185,7 +185,12 @@ const baptismSchema = new Schema(
     notes: {
       type: String,
     },
-    owner: {
+    parishOwner: {
+      type: Schema.Types.ObjectId,
+      ref: "parish",
+      required: true,
+    },
+    userOwner: {
       type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
@@ -318,6 +323,9 @@ const addSchema = Joi.object({
     phone: Joi.string().optional().messages({
       "any.required": `priest.phone is optional field`,
     }),
+  }),
+  notes: Joi.string().optional().messages({
+    "any.required": `notes is optional field`,
   }),
   certificate: Joi.boolean(),
   chrismation: Joi.boolean(),

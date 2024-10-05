@@ -3,14 +3,18 @@ const { Baptism } = require("../models/baptism");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listBaptisms = async (req, res) => {
-  const { _id: owner } = req.user;
+  const { _id: owner, parish } = req.user;
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
-  const listBaptisms = await Baptism.find({ owner }, "-createdAt -updatedAt", {
-    skip,
-    limit,
-  }).populate("owner", "email");
-  res.json(listBaptisms);
+  const listBaptisms = await Baptism.find(
+    { parishOwner },
+    "-createdAt -updatedAt",
+    {
+      skip,
+      limit,
+    }
+  ).populate("parishOwner", "email");
+  res.json({ total: listBaptisms.length, listBaptisms });
 };
 
 const getById = async (req, res) => {
@@ -24,9 +28,19 @@ const getById = async (req, res) => {
 
 const addBaptism = async (req, res) => {
   console.log(req.user);
-  const { _id: owner } = req.user;
-
-  const addedBaptism = await Baptism.create({ ...req.body, owner });
+  const { _id: userOwner, parish: parishOwner, userStatus } = req.user;
+  console.log("Users status", userStatus);
+  if (userStatus === "admin") {
+    throw HttpError(
+      400,
+      "Admin users are not authorized to create Sacramental records, but only new parishes and users."
+    );
+  }
+  const addedBaptism = await Baptism.create({
+    ...req.body,
+    parishOwner,
+    userOwner,
+  });
   res.status(201).json(addedBaptism);
 };
 
