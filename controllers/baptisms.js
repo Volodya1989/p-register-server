@@ -3,7 +3,7 @@ const { Baptism } = require("../models/baptism");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listBaptisms = async (req, res) => {
-  const { _id: owner, parish } = req.user;
+  const { _id: owner, parish: parishOwner } = req.user;
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
   const listBaptisms = await Baptism.find(
