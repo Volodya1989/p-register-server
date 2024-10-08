@@ -30,7 +30,7 @@ const addBaptism = async (req, res) => {
   const { _id: userOwner, parish: parishOwner, userStatus } = req.user;
   if (userStatus === "admin") {
     throw HttpError(
-      400,
+      403,
       "Admin users are not authorized to create Sacramental records, but only new parishes and users."
     );
   }
