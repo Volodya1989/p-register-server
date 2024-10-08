@@ -27,7 +27,7 @@ const addParish = async (req, res) => {
   if (userStatus !== "admin") {
     throw HttpError(
       403,
-      "Regular users are not authorized to add new parishes, but only new Sacramental records and regular users."
+      "Regular users are not authorized to add new parishes, but only new Sacramental records and adding regular users."
     );
   }
   const addedParish = await Parish.create({ ...req.body, owner });
