@@ -45,6 +45,8 @@ const userSchema = new Schema(
     },
     parish: {
       type: Schema.Types.ObjectId,
+      //would need to delete after user creation app is developed
+      default: "670061dbdbc4ca411b1325e4",
       ref: "parish",
       required: function () {
         return this.userStatus !== "admin";

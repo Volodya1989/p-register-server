@@ -7,6 +7,7 @@ const jimp = require("jimp");
 const { nanoid } = require("nanoid");
 
 const { User } = require("../models/user");
+const { Parish } = require("../models/parish");
 
 const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 
@@ -86,7 +87,7 @@ const resendVerifyEmail = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, firstName } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password invalid");
@@ -106,6 +107,7 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
+  const parish = await Parish.findById({ _id: user.parish });
 
   res.json({
     token,
@@ -114,16 +116,18 @@ const login = async (req, res) => {
       userStatus: user.userStatus,
       firstName: user.firstName,
       lastName: user.lastName,
+      parish: parish.parishName,
     },
   });
 };
 
 const getCurrent = async (req, res) => {
-  const { email, userStatus } = req.user;
+  const { email, userStatus, firstName } = req.user;
 
   res.json({
     email,
     userStatus,
+    firstName,
   });
 };
 
