@@ -87,7 +87,7 @@ const resendVerifyEmail = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password, firstName } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password invalid");
@@ -122,12 +122,15 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, userStatus, firstName } = req.user;
+  const { email, userStatus, firstName, parish: parishId } = req.user;
+
+  const parish = await Parish.findById({ _id: parishId });
 
   res.json({
     email,
     userStatus,
     firstName,
+    parish: parish.parishName,
   });
 };
 
