@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
+const { empty } = require("@hapi/joi/lib/base");
 const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const baptismSchema = new Schema(
@@ -235,9 +236,12 @@ const addSchema = Joi.object({
     lastName: Joi.string().required().messages({
       "any.required": `missing required neophyte.lastName field`,
     }),
-    middleName: Joi.string().optional().messages({
-      "any.optional": `missing required neophyte.middleName field`,
-    }),
+    middleName: Joi.string()
+      .optional()
+      .messages({
+        "any.optional": `missing required neophyte.middleName field`,
+      })
+      .allow(null || ""),
     dob: Joi.string().required().messages({
       "any.required": `missing required neophyte.dob field`,
     }),
@@ -267,9 +271,12 @@ const addSchema = Joi.object({
     firstName: Joi.string().required().messages({
       "any.required": `missing required mother.firstName field`,
     }),
-    phone: Joi.string().optional().messages({
-      "any.required": `mother.phone is optional field`,
-    }),
+    phone: Joi.string()
+      .optional()
+      .messages({
+        "any.required": `mother.phone is optional field`,
+      })
+      .allow(null || ""),
   }),
   father: Joi.object({
     lastName: Joi.string().required().messages({
@@ -278,9 +285,12 @@ const addSchema = Joi.object({
     firstName: Joi.string().required().messages({
       "any.required": `missing required father.firstName field`,
     }),
-    phone: Joi.string().optional().messages({
-      "any.required": `father.phone is optional field`,
-    }),
+    phone: Joi.string()
+      .optional()
+      .messages({
+        "any.required": `father.phone is optional field`,
+      })
+      .allow(null || ""),
   }),
   godParent_1: Joi.object({
     lastName: Joi.string().required().messages({
@@ -289,9 +299,12 @@ const addSchema = Joi.object({
     firstName: Joi.string().required().messages({
       "any.required": `missing required godParent_1.firsttName field`,
     }),
-    phone: Joi.string().optional().messages({
-      "any.required": `father.phone is optional field`,
-    }),
+    phone: Joi.string()
+      .optional()
+      .messages({
+        "any.required": `father.phone is optional field`,
+      })
+      .allow(null || ""),
   }),
   godParent_2: Joi.object({
     lastName: Joi.string().required().messages({
@@ -303,29 +316,41 @@ const addSchema = Joi.object({
     phone: Joi.string().optional().messages({
       "any.required": `father.phone is optional field`,
     }),
-  }).optional(),
+  }).allow(null || ""),
   godParent_3: Joi.object({
-    lastName: Joi.string().required().messages({
-      "any.required": `missing required godParent_3.lastName field`,
-    }),
-    firstName: Joi.string().required().messages({
-      "any.required": `missing required godParent_3.firsttName field`,
-    }),
+    lastName: Joi.string()
+      .required()
+      .messages({
+        "any.required": `missing required godParent_3.lastName field`,
+      })
+      .allow(null || ""),
+    firstName: Joi.string()
+      .required()
+      .messages({
+        "any.required": `missing required godParent_3.firsttName field`,
+      })
+      .allow(null || ""),
     phone: Joi.string().optional().messages({
       "any.required": `father.phone is optional field`,
     }),
-  }).optional(),
+  }).allow(null || ""),
   godParent_4: Joi.object({
-    lastName: Joi.string().required().messages({
-      "any.required": `missing required godParent_4.lastName field`,
-    }),
-    firstName: Joi.string().required().messages({
-      "any.required": `missing required godParent_4.firsttName field`,
-    }),
+    lastName: Joi.string()
+      .optional()
+      .messages({
+        "any.required": `missing required godParent_4.lastName field`,
+      })
+      .allow(null || ""),
+    firstName: Joi.string()
+      .optional()
+      .messages({
+        "any.required": `missing required godParent_4.firsttName field`,
+      })
+      .allow(null || ""),
     phone: Joi.string().optional().messages({
       "any.required": `father.phone is optional field`,
     }),
-  }).optional(),
+  }).allow(null || ""),
   priest: Joi.object({
     lastName: Joi.string().required().messages({
       "any.required": `missing required priest.lastName field`,
@@ -333,13 +358,19 @@ const addSchema = Joi.object({
     firstName: Joi.string().required().messages({
       "any.required": `missing required priest.firstName field`,
     }),
-    phone: Joi.string().optional().messages({
-      "any.required": `priest.phone is optional field`,
-    }),
+    phone: Joi.string()
+      .optional()
+      .messages({
+        "any.required": `priest.phone is optional field`,
+      })
+      .allow(null || ""),
   }),
-  notes: Joi.string().optional().messages({
-    "any.required": `notes is optional field`,
-  }),
+  notes: Joi.string()
+    .optional()
+    .messages({
+      "any.required": `notes is optional field`,
+    })
+    .allow(null || ""),
   certificate: Joi.boolean(),
 });
 
